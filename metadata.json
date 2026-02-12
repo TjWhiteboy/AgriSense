@@ -1,0 +1,8 @@
+{
+  "name": "AgriSense",
+  "description": "An AI-powered advisory system that allows farmers to ask queries and receive accurate, context-aware answers instantly, with support for text, voice, and image inputs.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}

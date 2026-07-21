@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSense</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50:  '#e8f5e9',
+              100: '#c8e6c9',
+              200: '#a5d6a7',
+              300: '#81c784',
+              400: '#66bb6a',
+              500: '#4caf50',
+              600: '#43a047',
+              700: '#388e3c',
+              800: '#2e7d32',
+              900: '#1b5e20',
+            },
+            accent: {
+              500: '#1976d2',
+              600: '#1565c0',
+            }
+          },
+          fontFamily: {
+            sans:    ['Inter', 'sans-serif'],
+            heading: ['Manrope', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          },
+          backdropBlur: {
+            xs: '2px',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Glass card utilities */
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.08);
+    }
+    .glass-light {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(46,125,50,0.12);
+      box-shadow: 0 8px 32px 0 rgba(46,125,50,0.06);
+    }
+    .glass-dark {
+      background: rgba(13,17,23,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* Gradient hero background */
+    .hero-gradient {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 35%, #1565c0 100%);
+    }
+    .hero-gradient-light {
+      background: linear-gradient(135deg, #e8f5e9 0%, #e3f2fd 100%);
+    }
+    
+    /* Animations */
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.4; }
+      50%       { opacity: 0.9; }
+    }
+    .animate-pulse-ring { animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
+    }
+    .animate-float { animation: float 4s ease-in-out infinite; }
+
+    @keyframes fade-in-up {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .animate-fade-in-up { animation: fade-in-up 0.5s ease forwards; }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.12) 50%, rgba(0,0,0,0.06) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .dark .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%;
+    }
+  </style>
+  <script>
+    // This script prevents a flash of the wrong theme. It's placed in the head 
+    // to run before the body renders.
+    (function() {
+      try {
+        const theme = localStorage.getItem('agriSenseTheme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (_) {}
+    })();
+  </script>
+  <script>
+    // Global runtime error monitor for debugging silent crashes
+    function showRuntimeError(message, source, lineno, colno, error) {
+      console.error("Caught runtime crash:", message, "at", source, ":", lineno);
+      var errDiv = document.getElementById('debug-error-overlay');
+      if (!errDiv) {
+        errDiv = document.createElement('div');
+        errDiv.id = 'debug-error-overlay';
+        errDiv.style.position = 'fixed';
+        errDiv.style.top = '10px';
+        errDiv.style.left = '10px';
+        errDiv.style.right = '10px';
+        errDiv.style.zIndex = '999999';
+        errDiv.style.background = '#fef2f2';
+        errDiv.style.color = '#991b1b';
+        errDiv.style.border = '2px solid #f87171';
+        errDiv.style.padding = '20px';
+        errDiv.style.borderRadius = '12px';
+        errDiv.style.fontFamily = 'monospace';
+        errDiv.style.whiteSpace = 'pre-wrap';
+        errDiv.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+        document.body.appendChild(errDiv);
+      }
+      var header = document.createElement('h3');
+      header.textContent = '⚠️ Runtime JavaScript Error';
+      header.style.margin = '0 0 10px 0';
+      header.style.color = '#7f1d1d';
+      errDiv.appendChild(header);
+      
+      var detail = document.createElement('pre');
+      detail.textContent = 'Message: ' + message + '\nSource: ' + source + '\nLine: ' + lineno + '\nCol: ' + colno + '\nStack: ' + (error ? error.stack : 'N/A');
+      detail.style.margin = '0';
+      detail.style.fontSize = '12px';
+      detail.style.overflowX = 'auto';
+      errDiv.appendChild(detail);
+    }
+    window.onerror = function(message, source, lineno, colno, error) {
+      showRuntimeError(message, source, lineno, colno, error);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      var reason = event.reason;
+      showRuntimeError(
+        reason ? reason.message || String(reason) : 'Unhandled promise rejection',
+        reason && reason.fileName || 'unknown',
+        reason && reason.lineNumber || 0,
+        reason && reason.columnNumber || 0,
+        reason
+      );
+    });
+  </script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50 dark:bg-[#0D1117]">
+  <div id="root"></div>
+  <!-- config.js is generated at runtime (Cloud Run) to inject the API key; safe to ignore locally -->
+  <script>
+    // Load config.js gracefully: silence 404 in local dev
+    (function(){
+      var s = document.createElement('script');
+      s.src = '/config.js';
+      s.onerror = function(){};
+      document.head.appendChild(s);
+    })();
+  </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

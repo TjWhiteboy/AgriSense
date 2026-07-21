@@ -141,3 +141,28 @@ exports.getWeather = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch weather data', details: err.message });
   }
 };
+
+exports.reverseGeocode = async (req, res) => {
+  const { lat, lon } = req.query;
+  if (!lat || !lon) {
+    return res.status(400).json({ error: 'lat and lon query parameters are required' });
+  }
+  
+  const apiKey = process.env.OPENWEATHER_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'OpenWeatherMap API key not configured' });
+  }
+  
+  try {
+    const geoRes = await axios.get(`http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`);
+    if (geoRes.data && geoRes.data.length > 0) {
+      const location = geoRes.data[0];
+      // OWM usually returns the city/district level name in `name`
+      return res.json({ district: location.name, state: location.state || '' });
+    }
+    return res.status(404).json({ error: 'Location could not be resolved from coordinates' });
+  } catch (err) {
+    console.error('Reverse Geocode API error:', err.message);
+    res.status(500).json({ error: 'Failed to resolve location', details: err.message });
+  }
+};

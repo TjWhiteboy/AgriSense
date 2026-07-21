@@ -411,10 +411,8 @@ const App: React.FC = () => {
             <ContextSelector
               state={context.state}
               district={context.district}
-              crop={context.crop}
-              onStateChange={(st) => setContext((prev) => ({ ...prev, state: st, district: INDIAN_STATES_DISTRICTS[st][0] }))}
+              onStateChange={(st) => setContext((prev) => ({ ...prev, state: st, district: INDIAN_STATES_DISTRICTS[st]?.[0] || '' }))}
               onDistrictChange={(dist) => setContext((prev) => ({ ...prev, district: dist }))}
-              onCropChange={(crp) => setContext((prev) => ({ ...prev, crop: crp }))}
             />
           )}
 

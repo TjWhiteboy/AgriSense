@@ -24,6 +24,7 @@ import { offlineService } from './services/offlineService';
 import Preloader from './components/Preloader';
 import ConfirmationModal from './components/ConfirmationModal';
 import AboutModal from './components/AboutModal';
+import { ToastProvider } from './contexts/ToastContext';
 
 const THEME_KEY = 'agriSenseTheme';
 
@@ -54,7 +55,7 @@ const App: React.FC = () => {
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
   const [currentView, setCurrentView] = useState<'chat' | 'dashboard' | 'crops' | 'profile' | 'settings' | 'admin' | 'weather' | 'market' | 'schemes' | 'notifications'>('dashboard');
-  const [showLanding, setShowLanding] = useState(true);
+  const [showLanding, setShowLanding] = useState(() => !localStorage.getItem('token'));
   const [confirmation, setConfirmation] = useState<{
     action: () => void;
     title: string;
@@ -464,7 +465,7 @@ const App: React.FC = () => {
             )}
             {currentView === 'market' && <MarketPage />}
             {currentView === 'schemes' && <SchemesPage />}
-            {currentView === 'notifications' && <NotificationsPage />}
+            {currentView === 'notifications' && <NotificationsPage district={context.district} />}
           </div>
 
         </main>
@@ -485,4 +486,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const AppWithProviders: React.FC = () => (
+  <ToastProvider>
+    <App />
+  </ToastProvider>
+);
+
+export default AppWithProviders;

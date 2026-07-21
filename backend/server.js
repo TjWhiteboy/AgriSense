@@ -11,6 +11,9 @@ const chatRoutes = require('./routes/chatRoutes');
 const cropRoutes = require('./routes/cropRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const weatherRoutes = require('./routes/weatherRoutes');
+const marketRoutes = require('./routes/marketRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require("./routes/authRoutes");
 
@@ -42,6 +45,9 @@ app.use("/api/auth", authRoutes);
 app.use('/api', chatRoutes);
 app.use('/api', cropRoutes);
 app.use('/api', profileRoutes);
+app.use('/api', weatherRoutes);
+app.use('/api', marketRoutes);
+app.use('/api', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Error Handling Middleware

@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 exports.generateResponse = async (prompt, imageBase64 = null, mimeType = null) => {
     try {
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash-latest" // use full standard model name to be safe
+            model: "gemini-2.5-flash"
         });
 
         const parts = [{ text: prompt }];

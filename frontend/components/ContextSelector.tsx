@@ -46,9 +46,9 @@ const ContextSelector: React.FC<ContextSelectorProps> = ({
       async (pos) => {
         try {
           const res = await apiClient.get(`/weather/reverse-geocode?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-          if (res.data.state) onStateChange(res.data.state);
+          if (res.state) onStateChange(res.state);
           // Sometimes OWM returns generic state names, let's prioritize district
-          if (res.data.district) onDistrictChange(res.data.district);
+          if (res.district) onDistrictChange(res.district);
           setLoadingLocation(false);
         } catch (err) {
           console.error('Reverse geocode failed, falling back to IP location', err);
